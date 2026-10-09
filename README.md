@@ -2,4 +2,4 @@ This is a repository for all conversation had with the AI and the output used in
 
 Phase 0:
 - Snippet for peticaopublica.com
-- https://github.com/soniadcm89/PhD-resources/tree/PP
+- https://github.com/soniadcm89/PhD-resources/tree/main/PP%20Resources
