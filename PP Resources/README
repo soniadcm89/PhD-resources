@@ -1,0 +1,73 @@
+# Petição Pública Data Extractor (Browser Snippet)
+
+A lightweight, zero-dependency browser console snippet designed to extract petition data (Title, Full Link, and Signature Count) directly from `peticaopublica.com` search results into your system clipboard as formatted CSV data.
+
+Because the extraction runs inside your own active browser session, it natively bypasses anti-bot measures (such as Cloudflare Turnstile and JS challenges) and handles Portuguese special characters (`é`, `ã`, `ç`) without encoding errors.
+
+---
+
+## Features
+
+- **Cloudflare Bypass:** Runs inside your authenticated browser context.
+- **Direct to Clipboard:** Copies extracted rows straight to your clipboard to bypass browser-blocked file downloads.
+- **Accurate Extraction:** Pulls petition titles, absolute URLs, and exact signature counts using native DOM selectors.
+- **No Dependencies:** No Python, Node.js, or external extensions required.
+
+---
+
+## How to Use
+
+### 1. Perform Your Search
+Navigate to any search results page on [peticaopublica.com](https://peticaopublica.com), for example:
+`https://peticaopublica.com/search.aspx?q=género&pg=1`
+
+### 2. Open Developer Tools
+Open your browser's Developer Tools Console:
+- **Windows/Linux:** Press `F12` or `Ctrl + Shift + I`
+- **Mac:** Press `Cmd + Option + I`
+- Or right-click anywhere on the page and select **Inspect** $\rightarrow$ **Console**.
+
+*(Note: If Chrome shows a warning about pasting, type `allow pasting` into the console and press Enter).*
+
+### 3. Run the Snippet
+Paste the following JavaScript code into the console and press **Enter**:
+
+```javascript
+(() => {
+  const rows = [["Title", "Link", "Signatures"]];
+  
+  // Target petition entries on the page
+  document.querySelectorAll('li.petResult').forEach(item => {
+    const titleLink = item.querySelector('.title a');
+    if (!titleLink) return;
+    
+    // Format Title and Link
+    const title = titleLink.innerText.trim().replace(/\s+/g, ' ').replace(/"/g, '""');
+    const href = titleLink.getAttribute('href');
+    const fullLink = href.startsWith('http') ? href : `[https://peticaopublica.com](https://peticaopublica.com)${href}`;
+    
+    // Extract Signature Count
+    const sigText = item.querySelector('.body p:last-child')?.innerText || "N/A";
+    const sigMatch = sigText.match(/\d+/);
+    const signatures = sigMatch ? sigMatch[0] : "0";
+
+    rows.push([`"${title}"`, `"${fullLink}"`, `"${signatures}"`]);
+  });
+
+  if (rows.length <= 1) {
+    console.error("No petResult items found on this page.");
+    return;
+  }
+
+  // Convert to CSV text format
+  const csvText = rows.map(e => e.join(",")).join("\n");
+
+  // Copy directly to system clipboard
+  copy(csvText);
+
+  const pgMatch = window.location.href.match(/pg=(\d+)/);
+  const pageNum = pgMatch ? pgMatch[1] : "1";
+
+  console.log(`%c Success! Extracted ${rows.length - 1} items from Page ${pageNum} and copied to clipboard!`, 'color: #00ff00; font-weight: bold;');
+  console.log("Press Ctrl+V (or Cmd+V) in Excel, Google Sheets, or Notepad to paste.");
+})();
