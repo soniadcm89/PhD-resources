@@ -79,4 +79,4 @@ faster-whisper, Whisper model weights) keep their own licences.
 
 ## How to cite
 
-Dalla Costa Montanari, S. (2026) Reel-Transcriber. GitHub repository.
+Dalla Costa Montanari, S. (2026) Reel-Transcriber. GitHub repository. https://github.com/soniadcm89/PhD-resources/tree/main/reel-transcriber
