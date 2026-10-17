@@ -1,0 +1,6 @@
+yt-dlp[curl-cffi]
+faster-whisper
+av>=14,<17   # faster-whisper 1.2.1 breaks with av 17+
+# GPU only (NVIDIA): CUDA libraries used by faster-whisper on Windows
+nvidia-cublas-cu12
+nvidia-cudnn-cu12==9.*
