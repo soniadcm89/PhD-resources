@@ -45,7 +45,7 @@ class TranscriptionResult:
 class Transcriber:
     """Loads the model once and reuses it across reels (batch mode)."""
 
-    def __init__(self, model_size: str = "small"):
+    def __init__(self, model_size: str = "large-v3"):
         self.model_size = model_size
         self._model = None
         self.device = None

@@ -71,7 +71,7 @@ def main() -> int:
     p.add_argument("url", nargs="?", help="a single Reel URL")
     p.add_argument("--batch", type=Path, help=".txt/.csv file with one URL per line")
     p.add_argument("--output-dir", type=Path, default=Path("corpus"))
-    p.add_argument("--model", default="small", help="Whisper size: tiny/base/small/medium/large-v3")
+    p.add_argument("--model", default="large-v3", help="Whisper size: tiny/base/small/medium/large-v3")
     p.add_argument("--language", choices=["pt", "it"], help="force language (default: auto-detect)")
     p.add_argument("--keep-audio", action="store_true")
     p.add_argument("--force", action="store_true", help="re-process reels already in the index")

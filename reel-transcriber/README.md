@@ -33,7 +33,7 @@ Copy the following:
 
 | Flag | Meaning |
 |---|---|
-| `--model small` | Whisper size (`small` default; `medium` is more accurate, slower) |
+| `--model large-v3` | Whisper size (`large-v3` default, most accurate; `small`/`medium` are faster but noticeably less accurate) |
 | `--language pt\|it` | Force the language instead of auto-detecting |
 | `--keep-audio` | Keep the audio file in the reel folder (deleted by default) |
 | `--force` | Re-process reels already marked `ok` in the index |
@@ -56,9 +56,15 @@ Re-runs skip reels with status `ok`; reels with status `failed` are retried.
 
 ## Methodological notes (for documenting your method)
 
-- **Model**: faster-whisper (CTranslate2 port of OpenAI Whisper), default `small`. Model, device, compute type and
+- **Model**: faster-whisper (CTranslate2 port of OpenAI Whisper), default `large-v3` (about 3 GB one-time download; needs roughly 4 GB of GPU memory in float16, and is very slow on CPU). In informal tests on a Portuguese reel, `small` and `medium` made many more errors than `large-v3`. Model, device, compute type and
   library versions are recorded in every `metadata.json`. GPU runs use float16; CPU runs use int8 (int8 can
   differ marginally from float16 output, so keep the same setup across a corpus if exact reproducibility matters).
+- **Transcripts are machine drafts and must be manually verified.** Even `large-v3` makes errors on Instagram
+  audio (low-bitrate audio, fast speech, music or background noise), including on whole phrases, and can
+  produce plausible-sounding but wrong text. Check the audio against the transcript (use `--keep-audio` and the
+  timestamped file) before quoting or coding any passage, and report this limitation in your methodology. In
+  informal tests on one reel, changing Whisper settings (forced language, VAD filter, prompt, beam size) did not
+  fix the errors, and separating voice from music with Demucs did not reliably improve them either.
 - **Settings**: faster-whisper defaults (beam size 5, no VAD filter, no initial prompt). Nothing is filtered or
   post-edited; segment text is Whisper's output, whitespace-trimmed. Whisper can hallucinate on music/silence, so
   spot-check reels with background music.
@@ -79,4 +85,4 @@ faster-whisper, Whisper model weights) keep their own licences.
 
 ## How to cite
 
-Dalla Costa Montanari, S. (2026) Reel-Transcriber. GitHub repository. https://github.com/soniadcm89/PhD-resources/tree/main/reel-transcriber
+Dalla Costa Montanari, S. (2026) Reel-Transcriber. GitHub repository.
